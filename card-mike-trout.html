@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Card Profile - CardScope.io</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
+            color: #e1e8ed;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        header {
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-subtitle {
+            font-size: 0.75rem;
+            color: #8899a6;
+            margin-top: -0.25rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: #8899a6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        nav a:hover {
+            color: #667eea;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #8899a6;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            transform: translateX(-4px);
+        }
+
+        .card-profile {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .card-showcase {
+            position: relative;
+        }
+
+        .card-main {
+            width: 100%;
+            aspect-ratio: 2.5 / 3.5;
+            background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+            border: 3px solid rgba(102, 126, 234, 0.4);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(102, 126, 234, 0.1) inset;
+        }
+
+        .card-main::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(102, 126, 234, 0.05) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .card-info {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .player-name {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .card-year-badge {
+            display: inline-block;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.5rem 1.25rem;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 6px;
+            color: #667eea;
+            margin-bottom: 2rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #8899a6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #e8e6e3;
+        }
+
+        .price-section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 16px;
+        }
+
+        .price-label {
+            font-size: 0.85rem;
+            color: #8899a6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-value {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .description {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #c9d1d9;
+            margin: 2rem 0;
+        }
+
+        .specs-section {
+            margin-top: 4rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+
+        .spec-key {
+            font-weight: 600;
+            color: #8899a6;
+        }
+
+        .spec-value {
+            color: #e8e6e3;
+            font-weight: 600;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: 1.25rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 1.25rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            border-radius: 12px;
+            color: #667eea;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .condition-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.1) 100%);
+            border: 2px solid rgba(34, 197, 94, 0.4);
+            border-radius: 8px;
+            color: #22c55e;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 968px) {
+            .card-profile {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .player-name {
+                font-size: 2.5rem;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+
+            .header-content {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content.contact-modal {
+            max-width: 700px;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #8899a6;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .modal-close:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .current-price-display {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .current-price-label {
+            color: #8899a6;
+            font-size: 0.9rem;
+        }
+
+        .current-price-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e1e8ed;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #e1e8ed;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8899a6;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .input-wrapper input {
+            padding-left: 2.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .offer-terms {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            cursor: pointer;
+            color: #c9d1d9;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #8899a6;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-submit {
+            flex: 1;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .success-message h3 {
+            font-size: 1.5rem;
+            color: #e1e8ed;
+            margin-bottom: 1rem;
+        }
+
+        .success-message p {
+            color: #8899a6;
+            margin-bottom: 2rem;
+        }
+
+        /* Chat Styles */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .seller-message .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .buyer-message .message-avatar {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-name {
+            font-weight: 600;
+            color: #e1e8ed;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .message-text {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            color: #c9d1d9;
+            line-height: 1.5;
+            margin-bottom: 0.25rem;
+        }
+
+        .seller-message .message-text {
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .buyer-message .message-text {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: #8899a6;
+        }
+
+        .chat-input-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .chat-input-form input {
+            flex: 1;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #e1e8ed;
+            font-size: 1rem;
+        }
+
+        .chat-input-form input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .quick-questions {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .quick-questions-label {
+            font-size: 0.85rem;
+            color: #8899a6;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .quick-question-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 8px;
+            color: #667eea;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin: 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .quick-question-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                max-height: 95vh;
+            }
+
+            .chat-container {
+                height: 500px;
+            }
+
+            .quick-question-btn {
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="cardscope.html" style="text-decoration: none;">
+                <div>
+                    <div class="logo">CardScope.io</div>
+                    <div class="logo-subtitle">Premium Baseball Card Marketplace</div>
+                </div>
+            </a>
+            <nav>
+                <a href="cardscope.html">Browse</a>
+                <a href="sell-cards.html">Sell Cards</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="cardscope.html" class="back-link">← Back to Browse All Cards</a>
+        
+        <div class="card-profile">
+            <div class="card-showcase">
+                <div class="card-main" id="cardImage">
+                    ⚾
+                </div>
+            </div>
+
+            <div class="card-info">
+                <h1 class="player-name" id="playerName">Loading...</h1>
+                <div class="card-year-badge" id="yearBadge">2011</div>
+                <div id="conditionBadge"></div>
+
+                <p class="description" id="description">
+                    Loading card details...
+                </p>
+
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Brand / Set</div>
+                        <div class="detail-value" id="brandValue">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Card Type</div>
+                        <div class="detail-value" id="typeValue">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Era</div>
+                        <div class="detail-value" id="eraValue">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Year</div>
+                        <div class="detail-value" id="yearValue">-</div>
+                    </div>
+                </div>
+
+                <div class="price-section">
+                    <div class="price-label">Current Market Price</div>
+                    <div class="price-value" id="priceValue">-</div>
+                </div>
+
+                <div class="cta-buttons">
+                    <button class="btn-primary" onclick="openOfferModal()">Make an Offer</button>
+                    <button class="btn-secondary" onclick="openContactModal()">Contact Seller</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="specs-section">
+            <h2 class="section-title">Card Specifications</h2>
+            <div class="spec-row">
+                <span class="spec-key">Authentication</span>
+                <span class="spec-value" id="authValue">Professional Grading Service</span>
+            </div>
+            <div class="spec-row">
+                <span class="spec-key">Condition</span>
+                <span class="spec-value" id="conditionValue">-</span>
+            </div>
+            <div class="spec-row">
+                <span class="spec-key">Rarity</span>
+                <span class="spec-value" id="rarityValue">Limited Production</span>
+            </div>
+            <div class="spec-row">
+                <span class="spec-key">Investment Grade</span>
+                <span class="spec-value" id="investmentValue">Premium Collectible</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Make an Offer Modal -->
+    <div class="modal" id="offerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Make an Offer</h2>
+                <button class="modal-close" onclick="closeOfferModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="current-price-display">
+                    <span class="current-price-label">Current Price:</span>
+                    <span class="current-price-amount" id="modalCurrentPrice">$8,750</span>
+                </div>
+                
+                <form id="offerForm" onsubmit="submitOffer(event)">
+                    <div class="form-group">
+                        <label for="offerAmount">Your Offer Amount</label>
+                        <div class="input-wrapper">
+                            <span class="currency-symbol">$</span>
+                            <input type="number" id="offerAmount" name="offerAmount" placeholder="8000" required min="1" step="1">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buyerName">Your Name</label>
+                        <input type="text" id="buyerName" name="buyerName" placeholder="John Smith" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buyerEmail">Email Address</label>
+                        <input type="email" id="buyerEmail" name="buyerEmail" placeholder="john@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buyerPhone">Phone Number (Optional)</label>
+                        <input type="tel" id="buyerPhone" name="buyerPhone" placeholder="(555) 123-4567">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="offerMessage">Message to Seller (Optional)</label>
+                        <textarea id="offerMessage" name="offerMessage" rows="4" placeholder="I'm very interested in this card. I'm a serious collector..."></textarea>
+                    </div>
+
+                    <div class="offer-terms">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="termsAgree" required>
+                            <span>I agree to the terms and conditions and understand this is a binding offer for 48 hours</span>
+                        </label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="closeOfferModal()">Cancel</button>
+                        <button type="submit" class="btn-submit">Submit Offer</button>
+                    </div>
+                </form>
+
+                <div id="offerSuccess" class="success-message" style="display: none;">
+                    <div class="success-icon">✓</div>
+                    <h3>Offer Submitted Successfully!</h3>
+                    <p>Your offer has been sent to the seller. You should receive a response within 24 hours.</p>
+                    <button class="btn-primary" onclick="closeOfferModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Seller Modal -->
+    <div class="modal" id="contactModal">
+        <div class="modal-content contact-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Contact Seller</h2>
+                <button class="modal-close" onclick="closeContactModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="chat-container" id="chatContainer">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message seller-message">
+                            <div class="message-avatar">S</div>
+                            <div class="message-content">
+                                <div class="message-name">Seller</div>
+                                <div class="message-text">Hi! Thanks for your interest in this card. How can I help you?</div>
+                                <div class="message-time">Just now</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form class="chat-input-form" id="chatForm" onsubmit="sendMessage(event)">
+                        <input type="text" id="chatInput" placeholder="Type your message..." required autocomplete="off">
+                        <button type="submit" class="send-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M2 10L18 2L12 18L10 11L2 10Z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </form>
+
+                    <div class="quick-questions">
+                        <div class="quick-questions-label">Quick Questions:</div>
+                        <button class="quick-question-btn" onclick="sendQuickMessage('Is this card still available?')">Is this available?</button>
+                        <button class="quick-question-btn" onclick="sendQuickMessage('Can you provide more photos?')">More photos?</button>
+                        <button class="quick-question-btn" onclick="sendQuickMessage('Would you accept a lower price?')">Negotiate price?</button>
+                        <button class="quick-question-btn" onclick="sendQuickMessage('What are the shipping options?')">Shipping options?</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cardsData = [
+            {
+                player: "Mike Trout",
+                year: "2011",
+                brand: "Topps Chrome",
+                type: "Rookie Autograph",
+                price: "$8,750",
+                era: "modern",
+                condition: "PSA 10",
+                emoji: "⚾",
+                description: "One of the most sought-after modern baseball cards, this Mike Trout rookie autograph from 2011 Topps Chrome represents the emergence of baseball's greatest player of his generation. Graded PSA 10, this card is in pristine gem mint condition with perfect centering, sharp corners, and a flawless signature."
+            },
+            {
+                player: "Ronald Acuña Jr.",
+                year: "2018",
+                brand: "Topps Chrome",
+                type: "Rookie Autograph",
+                price: "$2,200",
+                era: "modern",
+                condition: "PSA 9",
+                emoji: "⚾",
+                description: "Ronald Acuña Jr.'s explosive debut season made this 2018 Topps Chrome rookie autograph an instant classic. Graded PSA 9, this card features the young superstar's on-card signature and showcases his early promise as one of baseball's most dynamic players."
+            },
+            {
+                player: "Derek Jeter",
+                year: "1993",
+                brand: "SP",
+                type: "Rookie Card",
+                price: "$1,450",
+                era: "modern",
+                condition: "PSA 9",
+                emoji: "⚾",
+                description: "The Captain's flagship rookie card from 1993 SP is one of the most iconic cards of the 1990s. This PSA 9 example captures Derek Jeter at the beginning of his legendary career with the New York Yankees, before his five World Series championships and 3,000+ hits."
+            },
+            {
+                player: "Shohei Ohtani",
+                year: "2018",
+                brand: "Topps Chrome",
+                type: "Rookie Card",
+                price: "$5,500",
+                era: "modern",
+                condition: "PSA 10",
+                emoji: "⚾",
+                description: "A true unicorn in baseball history, Shohei Ohtani's 2018 Topps Chrome rookie card in PSA 10 represents the only player to excel as both an elite pitcher and power hitter in the modern era. This gem mint card has become one of the most valuable modern rookies."
+            },
+            {
+                player: "Mickey Mantle",
+                year: "1952",
+                brand: "Topps",
+                type: "Rookie Card",
+                price: "$85,000",
+                era: "vintage",
+                condition: "PSA 5",
+                emoji: "⚾",
+                description: "The holy grail of baseball cards. Mickey Mantle's 1952 Topps rookie is the most iconic card in the hobby, featuring the Yankees legend in his second year. Even in PSA 5 condition, this card commands massive premiums due to its legendary status and the difficulty of finding centered examples."
+            },
+            {
+                player: "Jackie Robinson",
+                year: "1948",
+                brand: "Leaf",
+                type: "Rookie Card",
+                price: "$45,000",
+                era: "vintage",
+                condition: "PSA 4",
+                emoji: "⚾",
+                description: "More than just a baseball card, this 1948 Leaf Jackie Robinson rookie represents a pivotal moment in American history. Robinson broke baseball's color barrier in 1947, and this card from his second season is one of the most historically significant cards in the hobby."
+            },
+            {
+                player: "Ken Griffey Jr.",
+                year: "1989",
+                brand: "Upper Deck",
+                type: "Rookie Card",
+                price: "$3,200",
+                era: "modern",
+                condition: "PSA 10",
+                emoji: "⚾",
+                description: "The most iconic card of the junk wax era, Ken Griffey Jr.'s 1989 Upper Deck #1 rookie card in PSA 10 remains highly desirable. Junior's sweet swing and infectious smile made him baseball's most marketable player of the 1990s, and this card launched Upper Deck as a premium brand."
+            },
+            {
+                player: "Willie Mays",
+                year: "1952",
+                brand: "Topps",
+                type: "Rookie Card",
+                price: "$28,500",
+                era: "vintage",
+                condition: "PSA 6",
+                emoji: "⚾",
+                description: "The Say Hey Kid's 1952 Topps rookie card is one of the most important vintage cards in existence. Willie Mays is widely considered one of the five greatest players ever, and this PSA 6 example from the legendary 1952 Topps set is a museum-quality piece of baseball history."
+            },
+            {
+                player: "Vladimir Guerrero Jr.",
+                year: "2019",
+                brand: "Topps Chrome",
+                type: "Rookie Autograph",
+                price: "$1,850",
+                era: "modern",
+                condition: "PSA 10",
+                emoji: "⚾",
+                description: "Following in his Hall of Fame father's footsteps, Vladimir Guerrero Jr.'s 2019 Topps Chrome rookie autograph in PSA 10 captures one of baseball's most exciting young sluggers. His powerful swing and consistent production make this a strong modern investment piece."
+            },
+            {
+                player: "Roberto Clemente",
+                year: "1955",
+                brand: "Topps",
+                type: "Rookie Card",
+                price: "$18,500",
+                era: "vintage",
+                condition: "PSA 5",
+                emoji: "⚾",
+                description: "Roberto Clemente's 1955 Topps rookie card honors one of baseball's most beloved humanitarian players. The Hall of Famer's tragic death while delivering earthquake relief supplies has made his cards even more meaningful to collectors. This PSA 5 is a cherished piece of baseball heritage."
+            },
+            {
+                player: "Fernando Tatis Jr.",
+                year: "2019",
+                brand: "Topps Chrome",
+                type: "Rookie Autograph",
+                price: "$1,200",
+                era: "modern",
+                condition: "PSA 9",
+                emoji: "⚾",
+                description: "Before controversy, Fernando Tatis Jr. burst onto the scene as one of baseball's most electrifying talents. This 2019 Topps Chrome rookie autograph in PSA 9 captures his tremendous potential and remains a polarizing but intriguing piece in the modern market."
+            },
+            {
+                player: "Hank Aaron",
+                year: "1954",
+                brand: "Topps",
+                type: "Rookie Card",
+                price: "$32,000",
+                era: "vintage",
+                condition: "PSA 6",
+                emoji: "⚾",
+                description: "Hammerin' Hank's 1954 Topps rookie card is a cornerstone of any serious vintage collection. Aaron's 755 home runs stood as the all-time record for decades, and his dignified pursuit of excellence on and off the field makes this PSA 6 rookie a prized possession."
+            },
+            {
+                player: "Bryce Harper",
+                year: "2012",
+                brand: "Bowman Chrome",
+                type: "Prospect Autograph",
+                price: "$2,400",
+                era: "modern",
+                condition: "PSA 10",
+                emoji: "⚾",
+                description: "The most hyped prospect since LeBron James, Bryce Harper's 2012 Bowman Chrome prospect autograph in PSA 10 captures the phenom before his MLB debut. His 2015 MVP season and consistent star power have kept this card relevant in the modern market."
+            },
+            {
+                player: "Sandy Koufax",
+                year: "1955",
+                brand: "Topps",
+                type: "Rookie Card",
+                price: "$24,000",
+                era: "vintage",
+                condition: "PSA 5",
+                emoji: "⚾",
+                description: "Sandy Koufax's 1955 Topps rookie card represents one of the greatest pitchers who ever lived. His dominant stretch from 1963-1966 included three Cy Young awards and four no-hitters. This PSA 5 rookie is a blue-chip investment in baseball history."
+            },
+            {
+                player: "Juan Soto",
+                year: "2018",
+                brand: "Topps Chrome",
+                type: "Rookie Autograph",
+                price: "$1,950",
+                era: "modern",
+                condition: "PSA 10",
+                emoji: "⚾",
+                description: "Juan Soto's advanced hitting approach and patient eye at the plate made him an instant star. This 2018 Topps Chrome rookie autograph in PSA 10 gem mint condition captures one of the game's most disciplined young hitters and a perennial MVP candidate."
+            },
+            {
+                player: "Pete Rose",
+                year: "1963",
+                brand: "Topps",
+                type: "Rookie Card",
+                price: "$8,500",
+                era: "vintage",
+                condition: "PSA 7",
+                emoji: "⚾",
+                description: "Charlie Hustle's 1963 Topps rookie card remains popular despite his controversial ban from baseball. Pete Rose's 4,256 career hits still stand as the all-time record, and this PSA 7 rookie card from the classic 1963 set is a snapshot of baseball's Hit King."
+            }
+        ];
+
+        function getCardFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('card');
+        }
+
+        function getCardById(id) {
+            return cardsData.find(card => {
+                const cardId = card.player.toLowerCase().replace(/[.\s]/g, '-');
+                return cardId === id;
+            });
+        }
+
+        function loadCard() {
+            const cardId = getCardFromUrl();
+            let card;
+            
+            if (cardId) {
+                card = getCardById(cardId);
+            }
+            
+            if (!card) {
+                card = cardsData[0];
+            }
+
+            document.getElementById('pageTitle').textContent = `${card.player} ${card.year} - CardScope.io`;
+            document.getElementById('playerName').textContent = card.player;
+            document.getElementById('yearBadge').textContent = card.year;
+            document.getElementById('cardImage').textContent = card.emoji;
+            document.getElementById('description').textContent = card.description;
+            document.getElementById('brandValue').textContent = card.brand;
+            document.getElementById('typeValue').textContent = card.type;
+            document.getElementById('eraValue').textContent = card.era.charAt(0).toUpperCase() + card.era.slice(1);
+            document.getElementById('yearValue').textContent = card.year;
+            document.getElementById('priceValue').textContent = card.price;
+            document.getElementById('conditionValue').textContent = card.condition;
+            document.getElementById('authValue').textContent = card.condition ? `Professional Grading Service (${card.condition.split(' ')[0]})` : 'Ungraded';
+            
+            if (card.condition) {
+                document.getElementById('conditionBadge').innerHTML = `
+                    <div class="condition-badge">
+                        <span class="badge-dot"></span>
+                        ${card.condition} Certified
+                    </div>
+                `;
+            }
+
+            const gradeNum = card.condition ? parseInt(card.condition.split(' ')[1]) : 0;
+            if (gradeNum >= 9) {
+                document.getElementById('rarityValue').textContent = 'Gem Mint - Population Limited';
+                document.getElementById('investmentValue').textContent = 'Museum Quality Investment';
+            } else if (gradeNum >= 7) {
+                document.getElementById('rarityValue').textContent = 'High Grade - Strong Population';
+                document.getElementById('investmentValue').textContent = 'Premium Investment Grade';
+            } else if (gradeNum >= 5) {
+                document.getElementById('rarityValue').textContent = 'Mid Grade - Available';
+                document.getElementById('investmentValue').textContent = 'Solid Collectible Grade';
+            } else {
+                document.getElementById('rarityValue').textContent = 'Variable Population';
+                document.getElementById('investmentValue').textContent = 'Entry Level Investment';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadCard);
+
+        // Modal Functions
+        function openOfferModal() {
+            const modal = document.getElementById('offerModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Reset form and hide success message
+            document.getElementById('offerForm').reset();
+            document.getElementById('offerForm').style.display = 'block';
+            document.getElementById('offerSuccess').style.display = 'none';
+        }
+
+        function closeOfferModal() {
+            const modal = document.getElementById('offerModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openContactModal() {
+            const modal = document.getElementById('contactModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            const modal = document.getElementById('contactModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const offerModal = document.getElementById('offerModal');
+            const contactModal = document.getElementById('contactModal');
+            
+            if (event.target === offerModal) {
+                closeOfferModal();
+            }
+            if (event.target === contactModal) {
+                closeContactModal();
+            }
+        }
+
+        // Offer Form Submission
+        function submitOffer(event) {
+            event.preventDefault();
+            
+            const formData = {
+                amount: document.getElementById('offerAmount').value,
+                name: document.getElementById('buyerName').value,
+                email: document.getElementById('buyerEmail').value,
+                phone: document.getElementById('buyerPhone').value,
+                message: document.getElementById('offerMessage').value,
+                cardPlayer: document.getElementById('playerName').textContent,
+                currentPrice: document.getElementById('priceValue').textContent
+            };
+
+            // Simulate form submission
+            console.log('Offer submitted:', formData);
+
+            // Show success message
+            document.getElementById('offerForm').style.display = 'none';
+            document.getElementById('offerSuccess').style.display = 'block';
+
+            // In a real app, you would send this to a server
+            // fetch('/api/submit-offer', { method: 'POST', body: JSON.stringify(formData) })
+        }
+
+        // Chat Functions
+        let messageCount = 0;
+
+        function sendMessage(event) {
+            event.preventDefault();
+            
+            const input = document.getElementById('chatInput');
+            const messageText = input.value.trim();
+            
+            if (messageText) {
+                addBuyerMessage(messageText);
+                input.value = '';
+                
+                // Simulate seller response after a delay
+                setTimeout(() => {
+                    const responses = [
+                        "Thanks for your message! Let me get back to you on that.",
+                        "Great question! The card is in excellent condition as described.",
+                        "Yes, I can definitely help with that. What else would you like to know?",
+                        "I appreciate your interest! I'm happy to provide more details.",
+                        "That's a fair question. Let me check and get back to you shortly."
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addSellerMessage(randomResponse);
+                }, 1000 + Math.random() * 2000);
+            }
+        }
+
+        function sendQuickMessage(message) {
+            addBuyerMessage(message);
+            
+            // Simulate seller response based on quick question
+            setTimeout(() => {
+                let response = "Thanks for your question! ";
+                
+                if (message.includes('available')) {
+                    response += "Yes, this card is still available and ready to ship!";
+                } else if (message.includes('photos')) {
+                    response += "I'd be happy to send you additional photos. What specific angles would you like to see?";
+                } else if (message.includes('price')) {
+                    response += "I'm open to reasonable offers. What price did you have in mind?";
+                } else if (message.includes('shipping')) {
+                    response += "I offer USPS Priority Mail ($8) and FedEx Overnight ($25). Both include tracking and insurance.";
+                }
+                
+                addSellerMessage(response);
+            }, 1000 + Math.random() * 2000);
+        }
+
+        function addBuyerMessage(text) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+            
+            const messageHTML = `
+                <div class="message buyer-message">
+                    <div class="message-avatar">Y</div>
+                    <div class="message-content">
+                        <div class="message-name">You</div>
+                        <div class="message-text">${escapeHtml(text)}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function addSellerMessage(text) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+            
+            const messageHTML = `
+                <div class="message seller-message">
+                    <div class="message-avatar">S</div>
+                    <div class="message-content">
+                        <div class="message-name">Seller</div>
+                        <div class="message-text">${escapeHtml(text)}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Format offer amount input
+        document.addEventListener('DOMContentLoaded', function() {
+            const offerInput = document.getElementById('offerAmount');
+            if (offerInput) {
+                offerInput.addEventListener('input', function(e) {
+                    // Remove any non-numeric characters except decimal
+                    this.value = this.value.replace(/[^\d]/g, '');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
